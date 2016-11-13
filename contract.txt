@@ -29,14 +29,7 @@ contract MyContract {
     function setOwner(uint K, string message) {
         owner = msg.sender; 
         setUpKey(K, message);
-
-        print("Owner finish set");
-        address addr = msg.sender;
-        
-        if (addr == owner) {
-            print("You are the Key Owner!! Cannot be as Key Holder!!!");
-            return;
-        }
+        print("Key Owner Setup Done!!!");
         return;
     }
 
@@ -51,7 +44,7 @@ contract MyContract {
          address addr = msg.sender;
         
         if (addr == owner) {
-            print("You are the Key Owner!! Cannot be as Key Holder!!!");
+            print("You are the Key Owner!! Cannot be as Key Holder!!! You are calling getHash()!!");
             return;
         }
 
@@ -75,7 +68,7 @@ contract MyContract {
 
     //Decrypt Message Method(Omit)
     function decryptMessage(uint k) internal returns (string){
-        return "HAHA";
+        return encryptedMessage;
     }
 
 
@@ -127,7 +120,7 @@ contract MyContract {
         address addr = msg.sender;
         
         if (addr == owner) {
-            print("You are the Key Owner!! Cannot be as Key Holder!!!");
+            print("You are the Key Owner!! Cannot be as Key Holder you are calling getSecretKey()!!");
             return;
         }
 
