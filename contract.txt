@@ -5,7 +5,7 @@ contract MyContract {
      event print(string out);
      address private owner;
      address[3] private secretKeeper;
-     uint[3] private secretKey;
+     uint[3] private subKey;
      string[3] private hashKeyArray;
      uint public usedNumber;
      uint public publishedNumber;
@@ -18,7 +18,7 @@ contract MyContract {
     
     function MyContract() {
         secretKeeper = [0, 0, 0];
-        secretKey = [0, 0, 0];
+        subKey = [0, 0, 0];
         hashKeyArray = [hashFunction(0), hashFunction(1), hashFunction(2)]; //Hash 3 random Value
         usedNumber = 0;
         publishedNumber = 0;
@@ -75,7 +75,7 @@ contract MyContract {
     //Encrypt Key Method(Omit)
     //(3, 2) - Shamir Threshold Scheme
     function encryptKey(uint k) internal {
-        secretKey = [1, 2, 3];
+        subKey = [1, 2, 3];
     }
 
     // Decrupt Key
@@ -111,7 +111,7 @@ contract MyContract {
     }
 
 
-    function getSecretKey(uint hashKeyInt) {
+    function getSubKey(uint hashKeyInt) {
         if (usedNumber >= totalKeeper) {
             print("NO MORE SPACE!!");
             return;
@@ -155,7 +155,7 @@ contract MyContract {
         }
     }
     
-    function setSecretKey() {
+    function unlockSubKey() {
 
         address addr = msg.sender;
 
