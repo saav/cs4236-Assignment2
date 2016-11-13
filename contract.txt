@@ -26,10 +26,17 @@ contract MyContract {
         publishedNumber = 0;
         threshold = 2;
         totalKeeper = 3; 
-        openingTime = now + 1 minutes;
+        openingTime = now + 5 minutes;
+        owner = 0;
     }
 
     function setOwner(uint K, string message) {
+
+        if (owner != 0) {
+            print("Already have an Owner!!!!");
+            return;
+        }
+
         owner = msg.sender; 
         setUpKey(K, message);
         print("Key Owner Setup Done!!!");
@@ -176,13 +183,22 @@ contract MyContract {
             return;
         }
 
-        if (secretKeeper[0] == addr || secretKeeper[1] == addr || secretKeeper[2] == addr) {
-            print("One Address is published/unlock");
+        if (secretKeeper[0] == addr) {
             publishedNumber++;
+            secretKeeper[0] = 0;
+        }
+
+        if (secretKeeper[1] == addr) {
+            publishedNumber++;
+            secretKeeper[1] = 0;
+        }
+
+        if (secretKeeper[2] == addr) {
+            publishedNumber++;
+            secretKeeper[2] = 0;
         }
 
         if (publishedNumber == threshold) {
-
             uint k = decryptKey();
             decryptedMessage = decryptMessage(k);
             print("FINISHED!!!");
