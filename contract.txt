@@ -15,6 +15,8 @@ contract MyContract {
      uint private a;
      string private decryptedMessage;
      string private encryptedMessage;
+     uint public openingTime;
+
     
     function MyContract() {
         secretKeeper = [0, 0, 0];
@@ -24,6 +26,7 @@ contract MyContract {
         publishedNumber = 0;
         threshold = 2;
         totalKeeper = 3; 
+        openingTime = now + 1 minutes;
     }
 
     function setOwner(uint K, string message) {
@@ -157,6 +160,10 @@ contract MyContract {
     
     function unlockSubKey() {
 
+        if (now < openingTime) {
+            print("Does not reach the opening day, please wait!!!");
+            return;
+        }
         address addr = msg.sender;
 
         if (addr == owner) {
@@ -165,12 +172,12 @@ contract MyContract {
         }
 
         if (secretKeeper[0] != addr && secretKeeper[1] != addr && secretKeeper[2] != addr) {
-            print("You are not the Key Holder!!");
+            print("You are not the Key Holder!! Cannot unlock");
             return;
         }
 
         if (secretKeeper[0] == addr || secretKeeper[1] == addr || secretKeeper[2] == addr) {
-            print("One Address is published");
+            print("One Address is published/unlock");
             publishedNumber++;
         }
 
@@ -181,8 +188,9 @@ contract MyContract {
             print("FINISHED!!!");
             print("TIME CAPSULE IS ");
             print(decryptedMessage);
+            //send ETHER to secret keeper
         } else {
-            print("ONE MORE!!");
+            print("Need ONE MORE secret keeper to unlock!!");
         }
     }
 }
