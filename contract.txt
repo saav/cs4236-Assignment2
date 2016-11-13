@@ -1,0 +1,132 @@
+pragma solidity ^0.4.2;
+
+contract MyContract {
+    /* Constructor */
+     event print(string out);
+     address private owner;
+     address[3] private secretKeeper;
+     uint[3] private secretKey;
+     uint public usedNumber;
+     uint public publishedNumber;
+     uint threshold;
+     uint totalKeeper;
+     uint private K;
+     uint private a;
+     string private decryptedMessage;
+     string private encryptedMessage;
+    
+    function MyContract() {
+        secretKeeper = [0, 0, 0];
+        secretKey = [0, 0, 0];
+        usedNumber = 0;
+        publishedNumber = 0;
+        threshold = 2;
+        totalKeeper = 3; 
+    }
+
+    function setOwner(uint K, string message) {
+        owner = msg.sender; 
+        setUpKey(K, message);
+
+        print("Owner finish set");
+
+    }
+
+    function setUpKey(uint K, string message) {
+        encryptedMessage = encryptMessage(K, message); // Encrypte Key by K and Message;
+        print("Encrypt Key finish set");
+        encryptKey(K);
+    }
+
+    // encrypt Message Method(Omit)
+    function encryptMessage(uint k, string message) returns (string){
+        return message;
+    }
+
+    //Decrypt Message Method(Omit)
+    function decryptMessage(uint k) returns (string){
+        return "HAHA";
+    }
+
+
+    //Encrypt Key Method(Omit)
+    //(3, 2) - Shamir Threshold Scheme
+    function encryptKey(uint k) {
+        secretKey = [1, 2, 3];
+    }
+
+    // Decrupt Key
+    //(3, 2) - Shamir Threshold Scheme
+    function decryptKey() returns (uint){
+        return K;
+    }
+
+
+    function getSecretKey() {
+        if (usedNumber >= totalKeeper) {
+            print("NO MORE SPACE!!");
+            return;
+        }
+        
+        address addr = msg.sender;
+        
+        if (addr == owner) {
+            print("You are the Key Owner!! Cannot be as Key Holder!!!");
+            return;
+        }
+
+
+        if (secretKeeper[0] == addr || secretKeeper[1] == addr || secretKeeper[2] == addr){
+            print("You have inserted Already!!!");
+            return;
+        }
+        
+        usedNumber++;
+        
+        if (usedNumber == 1) {
+            secretKeeper[0] = addr;
+            print("One Address set to hold the secret!!");
+        }
+        
+        else if (usedNumber == 2) {
+            secretKeeper[1] = addr;
+            print("One Address is set to hold the secret!!");
+        }
+        
+        else if (usedNumber == 2) {
+            secretKeeper[2] = addr;
+            print("One Address is set to hold the secret!!");
+        }
+    }
+    
+    function setSecretKey() {
+
+        address addr = msg.sender;
+
+        if (addr == owner) {
+            print("You are the Key Owner!! Cannot be as Key Holder!!!");
+            return;
+        }
+
+        if (secretKeeper[0] != addr && secretKeeper[1] != addr && secretKeeper[2] != addr) {
+            print("You are not the Key Holder!!");
+            return;
+        }
+
+        if (secretKeeper[0] == addr || secretKeeper[1] == addr || secretKeeper[2] == addr) {
+            print("One Address is published");
+            publishedNumber++;
+        }
+
+        if (publishedNumber == threshold) {
+
+            uint k = decryptKey();
+            decryptedMessage = decryptMessage(k);
+            print("FINISHED!!!");
+            print("TIME CAPSULE IS ");
+            print(decryptedMessage);
+        } else {
+            print("ONE MORE!!");
+        }
+    }
+}
